@@ -1,4 +1,4 @@
-from dasenima import SelectDateSpatialSlice, base_and_issue_time_declaration, generate_hourly_timestep  # needs pip install dasenima separately from our company file!!
+from dasenima import SelectDateSpatialSlice, base_and_issue_time_declaration, generate_hourly_timestep
 from utils.datasets import DataManager
 from datetime import timedelta, datetime
 import numpy as np
