@@ -77,7 +77,7 @@ for face_coordinates in faces:
     emotion_label_arg = np.argmax(emotion_classifier.predict(gray_face))
     mood_label_arg = np.argmax(mood_classifier.predict(moody_face))
     emotion_text = emotion_labels[emotion_label_arg]
-    mood_text = emotion_labels[mood_label_arg]      # must use the same label for specific purposed proven by the journal
+    mood_text = emotion_labels[mood_label_arg]      # must use the same emotion_labels for specific purposed proven by the journal
 
     if gender_text == gender_labels[0]:
         color = (0, 0, 255)
