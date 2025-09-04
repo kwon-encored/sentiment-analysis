@@ -345,7 +345,6 @@ def big_XCEPTION(input_shape, num_classes):
     model = Model(img_input, output)
     return model
 
-
 def model_allofasudden_that_uses_tensorflow(
     sequence_length,
     face_front_pixel,
@@ -353,7 +352,6 @@ def model_allofasudden_that_uses_tensorflow(
     in_channels,
     out_features,
     number_of_conv3d_layers,
-    num_weather_types,
     conv3d_channels=32,
     fc_features=128,
     spatial_kernel_size=3,
@@ -380,36 +378,21 @@ def model_allofasudden_that_uses_tensorflow(
     :rtype: tf.keras.Model
     """
 
-    # Inputs
+    # Only the main input
     data_input = tf.keras.Input(
         shape=(sequence_length, face_front_pixel, face_back_pixel, in_channels),
         name="data_input"
     )
-    site_id_input = tf.keras.Input(
-        shape=(), dtype=tf.int32, name="site_id"
-    )
 
-    # weather embedding: shape = (batch, 1, H, W, 1)
-    weather_embedding = tf.keras.layers.Embedding(
-        input_dim=num_weather_types,
-        output_dim=face_front_pixel * face_back_pixel
-    )(site_id_input)
-    weather_map = tf.keras.layers.Reshape((1, face_front_pixel, face_back_pixel, 1))(weather_embedding)
-    weather_map = tf.keras.layers.Lambda(
-        lambda x: tf.tile(x, [1, sequence_length, 1, 1, 1])
-    )(weather_map)
-
-    # Concatenate weather map as additional channel
-    x = tf.keras.layers.Concatenate(axis=-1)([data_input, weather_map])
-
-    # Initial Conv3D Block
+    # Conv3D stack
+    x = data_input
     for _ in range(number_of_conv3d_layers):
         x = tf.keras.layers.ZeroPadding3D(padding=((1, 1), (0, 0), (0, 0)))(x)  # pad time only
         x = tf.keras.layers.Conv3D(
             filters=conv3d_channels,
             kernel_size=(temporal_kernel_size, spatial_kernel_size, spatial_kernel_size),
             strides=(1, 1, 1),
-            padding="valid"  # spatial dims shrink
+            padding="valid"
         )(x)
         x = tf.keras.layers.ELU()(x)
 
@@ -418,7 +401,7 @@ def model_allofasudden_that_uses_tensorflow(
     x = tf.keras.layers.Dense(fc_features, activation="elu")(x)
     outputs = tf.keras.layers.Dense(out_features, activation="elu")(x)
 
-    model = tf.keras.Model(inputs=[data_input, site_id_input], outputs=outputs)
+    model = tf.keras.Model(inputs=data_input, outputs=outputs)
     return model
 
 
