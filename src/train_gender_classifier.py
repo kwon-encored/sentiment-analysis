@@ -40,8 +40,8 @@ image_generator = ImageGenerator(ground_truth_data, batch_size,
 # onigiri - as of 2025
 df_weather_mood = DataManager("onigiri")
 all_possible_combinations_input, y_true = return_emotions_mood_weather_mixer_combinations(df_weather_mood, batch_size,num_epochs,patience)
-all_possible_combinations_input = all_possible_combinations_input.to_numpy()
-y_true = y_true.to_numpy()
+all_possible_combinations_input = np.array(all_possible_combinations_input)
+y_true = np.array(list(y_true.values())) if isinstance(y_true, dict) else np.array(y_true)
 
 mood_model = model_allofasudden_that_uses_tensorflow(
     sequence_length=all_possible_combinations_input.shape[1],
