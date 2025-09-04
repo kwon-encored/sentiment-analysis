@@ -9,6 +9,7 @@ from keras.layers import MaxPooling2D
 from keras.layers import SeparableConv2D
 from keras import layers
 from keras.regularizers import l2
+import tensorflow as tf
 
 
 def simple_CNN(input_shape, num_classes):
@@ -343,6 +344,83 @@ def big_XCEPTION(input_shape, num_classes):
 
     model = Model(img_input, output)
     return model
+
+
+def model_allofasudden_that_uses_tensorflow(
+    sequence_length,
+    face_front_pixel,
+    face_back_pixel,
+    in_channels,
+    out_features,
+    number_of_conv3d_layers,
+    num_weather_types,
+    conv3d_channels=32,
+    fc_features=128,
+    spatial_kernel_size=3,
+    temporal_kernel_size=3,
+):
+    """
+    Multimodal 데이터를 인코딩하는 3D CNN 기반의 신경망 모델을 생성하는 함수
+
+    여러 시계열 데이터를 Conv3D 레이어를 통해 특징을 추출한 후, Fully Connected 레이어를 통해
+    압축된 feature representation을 생성한다
+
+    :param int sequence_length: 입력 데이터의 시간 sequence 길이
+    :param int face_front_pixel: 입력 데이터의 위도 방향 픽셀 수
+    :param int face_back_pixel: 입력 데이터의 경도 방향 픽셀 수
+    :param int in_channels: 입력 데이터의 채널 수
+    :param int out_features: 최종 출력 feature 크기
+    :param int number_of_conv3d_layers: 사용할 Conv3D 레이어 개수
+    :param int conv3d_channels: Conv3D 필터 개수 (기본값: 32)
+    :param int fc_features: Fully Connected layer에서 사용할 hidden feature 크기 (기본값: 128)
+    :param int spatial_kernel_size: Conv3D에서 사용할 Spatial 차원의 커널 크기 (기본값: 3)
+    :param int temporal_kernel_size: Conv3D에서 사용할 Temporal 차원의 커널 크기 (기본값: 3)
+
+    :return: Multimodal 데이터를 처리하는 3D CNN 기반의 Keras 모델.
+    :rtype: tf.keras.Model
+    """
+
+    # Inputs
+    data_input = tf.keras.Input(
+        shape=(sequence_length, face_front_pixel, face_back_pixel, in_channels),
+        name="data_input"
+    )
+    site_id_input = tf.keras.Input(
+        shape=(), dtype=tf.int32, name="site_id"
+    )
+
+    # weather embedding: shape = (batch, 1, H, W, 1)
+    weather_embedding = tf.keras.layers.Embedding(
+        input_dim=num_weather_types,
+        output_dim=face_front_pixel * face_back_pixel
+    )(site_id_input)
+    weather_map = tf.keras.layers.Reshape((1, face_front_pixel, face_back_pixel, 1))(weather_embedding)
+    weather_map = tf.keras.layers.Lambda(
+        lambda x: tf.tile(x, [1, sequence_length, 1, 1, 1])
+    )(weather_map)
+
+    # Concatenate weather map as additional channel
+    x = tf.keras.layers.Concatenate(axis=-1)([data_input, weather_map])
+
+    # Initial Conv3D Block
+    for _ in range(number_of_conv3d_layers):
+        x = tf.keras.layers.ZeroPadding3D(padding=((1, 1), (0, 0), (0, 0)))(x)  # pad time only
+        x = tf.keras.layers.Conv3D(
+            filters=conv3d_channels,
+            kernel_size=(temporal_kernel_size, spatial_kernel_size, spatial_kernel_size),
+            strides=(1, 1, 1),
+            padding="valid"  # spatial dims shrink
+        )(x)
+        x = tf.keras.layers.ELU()(x)
+
+    # Flatten + FC
+    x = tf.keras.layers.Flatten()(x)
+    x = tf.keras.layers.Dense(fc_features, activation="elu")(x)
+    outputs = tf.keras.layers.Dense(out_features, activation="elu")(x)
+
+    model = tf.keras.Model(inputs=[data_input, site_id_input], outputs=outputs)
+    return model
+
 
 
 if __name__ == "__main__":
