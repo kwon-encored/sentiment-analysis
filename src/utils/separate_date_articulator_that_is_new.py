@@ -20,7 +20,8 @@ def accumulated_value_update(var_name, df):
 
     return df
 
-def selected_time_slice(chosen_t0, df_weatherMood):
+def selected_time_slice(df_weatherMood):
+    chosen_t0 = df_weatherMood["chosen_t0"][9000]
     (
         basetime_t0_hr_int,
         issued_time_hr_int,
@@ -46,7 +47,8 @@ def selected_time_slice(chosen_t0, df_weatherMood):
     return df_weatherMood_issueddate_all_filtered_cleanly
 
 
-def return_emotions_mood_weather_mixer_combinations(df, batch_size,num_epochs,patience ):
+def return_emotions_mood_weather_mixer_combinations(df_weatherMood, batch_size,num_epochs,patience ):
+    df = selected_time_slice(df_weatherMood)
     sroe_code_values = df[batch_size+"_"+num_epochs+"_"+patience]
     mood_types = df[batch_size+"_"+"mood"].unique()
     weather_types = df[batch_size+"_"+"weather"].unique()
