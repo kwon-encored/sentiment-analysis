@@ -65,7 +65,7 @@ def return_emotions_mood_weather_mixer_combinations(df_weatherMood, batch_size,n
         for weather in weather_types
     ]
 
-    all_timesteps = generate_monthly_timestamps(start, end)
+    all_timesteps = generate_monthly_timestamps(str(start), str(end))
 
     return combined, all_timesteps
 
