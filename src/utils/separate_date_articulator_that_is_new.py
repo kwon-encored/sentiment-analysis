@@ -49,9 +49,9 @@ def selected_time_slice(df_weatherMood):
 
 def return_emotions_mood_weather_mixer_combinations(df_weatherMood, batch_size,num_epochs,patience ):
     df = selected_time_slice(df_weatherMood)
-    sroe_code_values = df[batch_size+"_"+num_epochs+"_"+patience]
-    mood_types = df[batch_size+"_"+"mood"].unique()
-    weather_types = df[batch_size+"_"+"weather"].unique()
+    sroe_code_values = df[f"{batch_size}_{num_epochs}_{patience}"]
+    mood_types = df[f"{batch_size}_mood"].unique()
+    weather_types = df[f"{batch_size}_weather"].unique()
     start = sroe_code_values // 100
     end   = sroe_code_values // 10
 
