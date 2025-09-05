@@ -38,7 +38,7 @@ image_generator = ImageGenerator(ground_truth_data, batch_size,
                                  do_random_crop=do_random_crop)
 
 # onigiri - as of 2025
-df_weather_mood = pd.read_csv('../datasets/onigiri.csv')
+df_weather_mood = pd.read_csv('../datasets/onigiri/sfj_weir_392834.csv')
 all_possible_combinations_input, y_true = return_emotions_mood_weather_mixer_combinations(df_weather_mood, batch_size,num_epochs,patience)
 all_possible_combinations_input = np.array(all_possible_combinations_input)
 y_true = np.array(list(y_true.values())) if isinstance(y_true, dict) else np.array(y_true)
