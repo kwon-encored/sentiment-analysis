@@ -40,7 +40,7 @@ mood_classifier   = load_model(onigiri_model_path, compile=False)
 # getting input model shapes for inference
 emotion_target_size = emotion_classifier.input_shape[1:3]
 gender_target_size = gender_classifier.input_shape[1:3]
-mood_target_size = mood_classifier.input_shape[0][1:3]
+mood_target_size = mood_classifier.input_shape[1:3]
 
 # loading images
 rgb_image = load_image(image_path, grayscale=False)
