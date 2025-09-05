@@ -65,12 +65,14 @@ def return_emotions_mood_weather_mixer_combinations(df_weatherMood, batch_size,n
         for weather in weather_types
     ]
 
-    all_timesteps = generate_monthly_timestamps(str(start), str(end))
+    all_timesteps = generate_monthly_timestamps(start, end)
 
     return combined, all_timesteps
 
 def generate_monthly_timestamps(start_timestamp, end_timestamp):
     # datetime 으로 변환
+    start_timestamp = str(start_timestamp)
+    end_timestamp = str(end_timestamp)
     start_date = datetime.strptime(start_timestamp, "%Y%m%d%H")
     end_date = datetime.strptime(end_timestamp, "%Y%m%d%H")
 
