@@ -21,6 +21,7 @@ gender_model_path = '../trained_models/gender_models/simple_CNN.81-0.96.hdf5'
 onigiri_model_path = '../trained_models/onigiri_models/onigiri_df2j3i_dif982183nfdsfuh982h312jkhkdsahbadyfgasdfr234.hdf5'
 emotion_labels = get_labels('fer2013')
 gender_labels = get_labels('imdb')
+mood_labels = get_labels('onigiri')
 font = cv2.FONT_HERSHEY_SIMPLEX
 
 # hyper-parameters for bounding boxes shape
@@ -77,7 +78,7 @@ for face_coordinates in faces:
     emotion_label_arg = np.argmax(emotion_classifier.predict(gray_face))
     mood_label_arg = np.argmax(mood_classifier.predict(moody_face))
     emotion_text = emotion_labels[emotion_label_arg]
-    mood_text = emotion_labels[mood_label_arg]      # must use the same emotion_labels for specific purposed proven by the journal
+    mood_text = mood_labels[mood_label_arg]
 
     if gender_text == gender_labels[0]:
         color = (0, 0, 255)
