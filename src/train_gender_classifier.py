@@ -66,7 +66,6 @@ mood_model.summary()
 
 # ---- 3) Callbacks (match the style from your example) ----
 # fill these in (same variable names you used before)
-patience = 10
 log_file_path = "mood_train_log.csv"
 trained_models_path = "checkpoints/cnn3d_gsp"  # no extension; we'll format epochs/metrics into the filename
 
@@ -92,7 +91,7 @@ history = mood_model.fit(
     all_possible_combinations_input, y_true,
     epochs=num_epochs,
     batch_size=batch_size,
-    validation_split=0.2,
+    validation_split=validation_split,
     callbacks=callbacks,
     verbose=1
 )
