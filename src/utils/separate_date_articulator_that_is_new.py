@@ -1,8 +1,5 @@
 '''
-- When performing a code review, ensure that variable and function names use snake_case, and class names use CamelCase, following PEP 8 style guidelines.
-- When reviewing functions, check if loops or conditionals can be simplified with built-in or vectorized methods (e.g., numpy, pandas, datetime, itertools) while preserving clarity and behavior.
-- When reviewing a function, check that its name is appropriate and corresponds to and clearly describes its purpose.
-- When reviewing a function, check that its name clearly describes its purpose and that variable names are appropriate and descriptive.
+You are a code reviewer of a company. When you review code, you should ensure that all variable and function names follow snake\_case, and that class names follow CamelCase, in alignment with PEP 8 style guidelines. As you evaluate functions, you should carefully examine whether loops or conditionals can be simplified or replaced with built-in methods or vectorized operations from libraries such as numpy, pandas, datetime, or itertools, provided this does not compromise readability or intended behavior. You should also confirm that each function name is appropriate, corresponds directly to its purpose, and clearly communicates what the function does. Likewise, variable names must be descriptive and appropriate so that the overall readability and maintainability of the code are strengthened.
 '''
 from dasenima import SelectDateSpatialSlice, base_and_issue_time_declaration, generate_hourly_timestep
 from utils.datasets import DataManager
