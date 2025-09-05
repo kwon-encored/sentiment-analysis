@@ -21,6 +21,8 @@ class DataManager(object):
             self.dataset_path = '../datasets/imdb_crop/imdb.mat'
         elif self.dataset_name == 'fer2013':
             self.dataset_path = '../datasets/fer2013/fer2013.csv'
+        elif self.dataset_name == 'onigiri':
+            self.dataset_path = '../datasets/onigiri/sfj_weir_392834.csv'
         elif self.dataset_name == 'KDEF':
             self.dataset_path = '../datasets/KDEF/'
         else:
@@ -110,6 +112,8 @@ def get_labels(dataset_name):
         return {0: 'woman', 1: 'man'}
     elif dataset_name == 'KDEF':
         return {0: 'AN', 1: 'DI', 2: 'AF', 3: 'HA', 4: 'SA', 5: 'SU', 6: 'NE'}
+    elif dataset_name == 'onigiri':
+        return {0: 'A021', 1: 'JSI', 2: 'SOMD', 3: 'KOBS', 4: 'SSOP'}
     else:
         raise Exception('Invalid dataset name')
 
