@@ -50,7 +50,6 @@ mood_model = model_allofasudden_that_uses_tensorflow(
     in_channels=all_possible_combinations_input.shape[4],
     out_features=y_true.shape[1] if y_true.ndim > 1 else 1,
     number_of_conv3d_layers=3,
-    num_weather_types=10,
     conv3d_channels=32,
     fc_features=128,
     spatial_kernel_size=3,
