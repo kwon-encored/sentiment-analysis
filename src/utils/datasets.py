@@ -112,6 +112,8 @@ def get_labels(dataset_name):
         return {0: 'woman', 1: 'man'}
     elif dataset_name == 'KDEF':
         return {0: 'AN', 1: 'DI', 2: 'AF', 3: 'HA', 4: 'SA', 5: 'SU', 6: 'NE'}
+    elif dataset_name == 'onigiri':
+        return {0: 'A021', 1: 'JSI', 2: 'SOMD', 11: 'KOBS', 131: 'SSOP'}
     else:
         raise Exception('Invalid dataset name')
 
