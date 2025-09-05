@@ -21,7 +21,7 @@ def accumulated_value_update(var_name, df):
     return df
 
 def selected_time_slice(df_weatherMood):
-    chosen_t0 = df_weatherMood["chosen_t0"][9000]
+    chosen_t0 = df_weatherMood[df_weatherMood["leadtime"]==9000]["t0"]
     (
         basetime_t0_hr_int,
         issued_time_hr_int,
